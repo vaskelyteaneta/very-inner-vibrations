@@ -1,121 +1,131 @@
 {
   "format": "custom",
   "id": "settings",
-  "label": "Settings",
-  "repeatable": false,
-  "status": true,
   "json": {
     "Main": {
       "logo": {
-        "type": "Image",
         "config": {
-          "label": "Logo",
           "constraint": {},
+          "label": "Logo",
           "thumbnails": []
-        }
+        },
+        "type": "Image"
       },
       "footer_text": {
-        "type": "StructuredText",
         "config": {
-          "label": "Footer text (optional)",
-          "placeholder": "",
           "allowTargetBlank": false,
-          "multi": "paragraph,strong,em"
-        }
+          "label": "Footer text (optional)",
+          "multi": "paragraph,strong,em",
+          "placeholder": ""
+        },
+        "type": "StructuredText"
       },
       "footer_links": {
-        "type": "Group",
         "config": {
-          "label": "footer_links",
-          "repeat": true,
           "fields": {
             "label": {
-              "type": "Text",
               "config": {
                 "label": "label",
                 "placeholder": "e.g. Instagram"
-              }
+              },
+              "type": "Text"
             },
             "link": {
-              "type": "Link",
               "config": {
-                "label": "link",
-                "placeholder": "",
-                "select": null,
                 "allowTargetBlank": true,
                 "allowText": true,
-                "repeat": false
-              }
+                "label": "link",
+                "placeholder": "",
+                "repeat": false,
+                "select": null
+              },
+              "type": "Link"
             }
-          }
-        }
+          },
+          "label": "footer_links",
+          "repeat": true
+        },
+        "type": "Group"
       },
       "navigation": {
-        "type": "Group",
         "config": {
-          "label": "navigation",
-          "repeat": true,
           "fields": {
             "label": {
-              "type": "Text",
               "config": {
                 "label": "label",
                 "placeholder": ""
-              }
+              },
+              "type": "Text"
             },
             "link": {
-              "type": "Link",
               "config": {
-                "label": "link",
-                "placeholder": "",
-                "select": null,
                 "allowTargetBlank": true,
                 "allowText": true,
-                "repeat": false
-              }
+                "label": "link",
+                "placeholder": "",
+                "repeat": false,
+                "select": null
+              },
+              "type": "Link"
             },
             "visible_on": {
-              "type": "Select",
               "config": {
+                "default_value": "Both",
                 "label": "Show on version (White = Malak Haynes / Black = Very Inner Vibrations)",
-                "placeholder": "",
-                "options": ["Both", "White only", "Black only"],
-                "default_value": "Both"
-              }
+                "options": [
+                  "Both",
+                  "White only",
+                  "Black only"
+                ],
+                "placeholder": ""
+              },
+              "type": "Select"
             }
-          }
-        }
+          },
+          "label": "navigation",
+          "repeat": true
+        },
+        "type": "Group"
       },
       "slices": {
-        "type": "Slices",
-        "fieldset": "Slice Zone"
+        "config": {
+          "choices": {}
+        },
+        "fieldset": "Slice Zone",
+        "type": "Slices"
       }
     },
     "Intro": {
       "intro_video": {
-        "type": "Link",
         "config": {
           "label": "Intro video (.mp4 upload) — leave empty to disable the intro splash entirely",
           "placeholder": "Upload or select an mp4",
           "select": "media"
-        }
+        },
+        "type": "Link"
       },
       "intro_video_url": {
-        "type": "Text",
         "config": {
           "label": "Intro video URL (.m3u8 HLS or .mp4) — paste an external link; overrides the uploaded file above",
           "placeholder": "https://…/playlist.m3u8"
-        }
+        },
+        "type": "Text"
       },
       "intro_frequency": {
-        "type": "Select",
         "config": {
+          "default_value": "Once per session",
           "label": "Intro plays",
-          "placeholder": "",
-          "options": ["Once per session", "Every visit"],
-          "default_value": "Once per session"
-        }
+          "options": [
+            "Once per session",
+            "Every visit"
+          ],
+          "placeholder": ""
+        },
+        "type": "Select"
       }
     }
-  }
+  },
+  "label": "Settings",
+  "repeatable": false,
+  "status": true
 }

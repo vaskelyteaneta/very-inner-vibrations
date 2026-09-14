@@ -1,0 +1,7 @@
+{
+  "repositoryName": "very-inner-vibrations",
+  "libraries": [
+    "./slices"
+  ],
+  "routes": []
+}

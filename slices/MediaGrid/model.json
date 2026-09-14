@@ -1,166 +1,226 @@
 {
-  "id": "media_grid",
-  "type": "SharedSlice",
-  "name": "MediaGrid",
   "description": "Reusable grid OR slider of media items (video / image / embed / text), each with a caption, size and optional link.",
+  "id": "media_grid",
+  "name": "MediaGrid",
+  "type": "SharedSlice",
   "variations": [
     {
-      "id": "default",
-      "name": "Default",
-      "docURL": "...",
-      "version": "initial",
       "description": "Default",
-      "imageUrl": "",
+      "docURL": "...",
+      "id": "default",
+      "imageUrl": "https://images.prismic.io/slice-machine/621a5ec4-0387-4bc5-9860-2dd46cbc07cd_default_ss.png?auto=compress,format",
+      "items": {},
+      "name": "Default",
       "primary": {
         "visible_on": {
-          "type": "Select",
           "config": {
+            "default_value": "Both",
             "label": "Show on version (White = Malak Haynes / Black = Very Inner Vibrations)",
-            "placeholder": "",
-            "options": ["Both", "White only", "Black only"],
-            "default_value": "Both"
-          }
+            "options": [
+              "Both",
+              "White only",
+              "Black only"
+            ],
+            "placeholder": ""
+          },
+          "type": "Select"
         },
         "shared_caption": {
-          "type": "StructuredText",
           "config": {
-            "label": "Shared caption (optional — used when every item shares the same caption, instead of filling in each item's own Caption field)",
-            "placeholder": "",
             "allowTargetBlank": false,
-            "multi": "paragraph,strong,em"
-          }
+            "label": "Shared caption (optional — used when every item shares the same caption, instead of filling in each item's own Caption field)",
+            "multi": "paragraph,strong,em",
+            "placeholder": ""
+          },
+          "type": "StructuredText"
         },
         "section_title": {
-          "type": "StructuredText",
           "config": {
-            "label": "Section title (optional)",
-            "placeholder": "",
             "allowTargetBlank": false,
-            "multi": "paragraph,strong,em"
-          }
+            "label": "TITLE",
+            "multi": "paragraph,strong,em",
+            "placeholder": ""
+          },
+          "type": "StructuredText"
         },
         "display_mode": {
-          "type": "Select",
           "config": {
+            "default_value": "Grid",
             "label": "Display mode",
-            "placeholder": "",
-            "options": ["Grid", "Slider"],
-            "default_value": "Grid"
-          }
+            "options": [
+              "Grid",
+              "Slider"
+            ],
+            "placeholder": ""
+          },
+          "type": "Select"
         },
         "items_per_row": {
-          "type": "Select",
           "config": {
+            "default_value": "1",
             "label": "Items per row (Grid) / slides per view (Slider)",
-            "placeholder": "",
-            "options": ["1", "2", "3", "4"],
-            "default_value": "1"
-          }
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "placeholder": ""
+          },
+          "type": "Select"
         },
         "gaps": {
-          "type": "Select",
           "config": {
+            "default_value": "normal",
             "label": "Gaps (spacing between items & grid width)",
-            "placeholder": "",
-            "options": ["normal", "full-screen"],
-            "default_value": "normal"
-          }
+            "options": [
+              "normal",
+              "full-screen"
+            ],
+            "placeholder": ""
+          },
+          "type": "Select"
         },
         "items": {
-          "type": "Group",
           "config": {
-            "label": "Items",
             "fields": {
               "content_type": {
-                "type": "Select",
                 "config": {
+                  "default_value": "Image",
                   "label": "Content type",
-                  "placeholder": "",
-                  "options": ["Video", "Image", "Embed", "Text"],
-                  "default_value": "Image"
-                }
+                  "options": [
+                    "Video",
+                    "Image",
+                    "Embed",
+                    "Text"
+                  ],
+                  "placeholder": ""
+                },
+                "type": "Select"
               },
               "video": {
-                "type": "Link",
-                "config": { "label": "Video file (.mp4 upload)", "placeholder": "Upload or select an mp4", "select": "media" }
+                "config": {
+                  "label": "Video file (.mp4 upload)",
+                  "placeholder": "Upload or select an mp4",
+                  "select": "media"
+                },
+                "type": "Link"
               },
               "video_url": {
-                "type": "Text",
-                "config": { "label": "Video URL (.m3u8 HLS stream or .mp4) — paste an external link; overrides the uploaded file above", "placeholder": "https://…/playlist.m3u8" }
+                "config": {
+                  "label": "Video URL (.m3u8 HLS stream or .mp4) — paste an external link; overrides the uploaded file above",
+                  "placeholder": "https://…/playlist.m3u8"
+                },
+                "type": "Text"
               },
               "poster": {
-                "type": "Image",
-                "config": { "label": "Poster / still image (Video) — when set, the grid shows this still and clicking it follows the item's Link instead of playing inline", "constraint": {}, "thumbnails": [] }
+                "config": {
+                  "constraint": {},
+                  "label": "Poster / still image (Video) — when set, the grid shows this still and clicking it follows the item's Link instead of playing inline",
+                  "thumbnails": []
+                },
+                "type": "Image"
               },
               "image": {
-                "type": "Image",
-                "config": { "label": "Image", "constraint": {}, "thumbnails": [] }
+                "config": {
+                  "constraint": {},
+                  "label": "Image",
+                  "thumbnails": []
+                },
+                "type": "Image"
               },
               "embed": {
-                "type": "Embed",
-                "config": { "label": "Embed (YouTube / Vimeo / SoundCloud)", "placeholder": "Paste a URL" }
+                "config": {
+                  "label": "Embed (YouTube / Vimeo / SoundCloud)",
+                  "placeholder": "Paste a URL"
+                },
+                "type": "Embed"
               },
               "text": {
-                "type": "StructuredText",
                 "config": {
-                  "label": "Text",
-                  "placeholder": "",
                   "allowTargetBlank": true,
-                  "multi": "paragraph,preformatted,heading2,heading3,strong,em,hyperlink,list-item,o-list-item"
-                }
+                  "label": "Text",
+                  "multi": "paragraph,preformatted,heading2,heading3,strong,em,hyperlink,list-item,o-list-item",
+                  "placeholder": ""
+                },
+                "type": "StructuredText"
               },
               "caption": {
-                "type": "StructuredText",
                 "config": {
-                  "label": "Caption (Enter = new row)",
-                  "placeholder": "",
                   "allowTargetBlank": false,
-                  "multi": "paragraph,strong,em"
-                }
+                  "label": "Caption (Enter = new row)",
+                  "multi": "paragraph,strong,em",
+                  "placeholder": ""
+                },
+                "type": "StructuredText"
               },
               "link": {
-                "type": "Link",
-                "config": { "label": "Link (optional — makes the item clickable)", "placeholder": "", "allowTargetBlank": true, "select": null }
+                "config": {
+                  "allowTargetBlank": true,
+                  "label": "Link (optional — makes the item clickable)",
+                  "placeholder": "",
+                  "select": null
+                },
+                "type": "Link"
               },
               "link_dark": {
-                "type": "Boolean",
                 "config": {
-                  "label": "Open linked page in black (Very Inner Vibrations) version",
-                  "default_value": false
-                }
+                  "default_value": false,
+                  "label": "Open linked page in black (Very Inner Vibrations) version"
+                },
+                "type": "Boolean"
               },
               "size": {
-                "type": "Select",
                 "config": {
+                  "default_value": "medium",
                   "label": "Size (Grid mode only)",
-                  "placeholder": "",
-                  "options": ["small", "medium", "large", "full-screen"],
-                  "default_value": "medium"
-                }
+                  "options": [
+                    "small",
+                    "medium",
+                    "large",
+                    "full-screen"
+                  ],
+                  "placeholder": ""
+                },
+                "type": "Select"
               },
               "object_fit": {
-                "type": "Select",
                 "config": {
+                  "default_value": "contain",
                   "label": "Image fit",
-                  "placeholder": "",
-                  "options": ["contain", "cover", "fill"],
-                  "default_value": "contain"
-                }
+                  "options": [
+                    "contain",
+                    "cover",
+                    "fill"
+                  ],
+                  "placeholder": ""
+                },
+                "type": "Select"
               },
               "image_height": {
-                "type": "Select",
                 "config": {
+                  "default_value": "auto",
                   "label": "Image height",
-                  "placeholder": "",
-                  "options": ["auto", "300px", "400px", "500px", "600px", "700px", "800px"],
-                  "default_value": "auto"
-                }
+                  "options": [
+                    "auto",
+                    "300px",
+                    "400px",
+                    "500px",
+                    "600px",
+                    "700px",
+                    "800px"
+                  ],
+                  "placeholder": ""
+                },
+                "type": "Select"
               }
-            }
-          }
+            },
+            "label": "Items"
+          },
+          "type": "Group"
         }
       },
-      "items": {}
+      "version": "initial"
     }
   ]
 }
