@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* Theme is set by proxy.ts based on domain (or the ?dark/?light override) via
+   data-theme on <html> — intentionally not tied to prefers-color-scheme. */
+[data-theme="dark"] {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+/* Plain @theme (not "inline") keeps these as live var() references in the
+   generated utilities, instead of Tailwind resolving/baking them at build
+   time — which was silently dropping the [data-theme="dark"] override. */
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+@theme inline {
+  --font-sans: var(--font-cormorant-garamond);
+}
+
+
+html, body {
+  background: var(--background) !important;
+  color: var(--foreground);
+  font-family: var(--font-cormorant-garamond), 'Cormorant Garamond', Georgia, serif;
+  overflow-x: hidden;
+}
+
+.splide__track {
+  overflow: hidden !important;
+}
+
+/* Theme toggle: top-right on desktop, bottom-center on mobile. */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 200;
+}
+@media (max-width: 768px) {
+  /* In normal flow, centered, just above the footer — no longer floating over
+     the footer's links. */
+  .theme-toggle {
+    position: static;
+    margin: 0 auto 1.5rem;
+    transform: none;
+  }
+}
+
+/* Clickable media only: items wrapped in a Link get this class, so the hover
+   affordance applies only to "choosable" items. On hover the image/video greys
+   out (and dims slightly) to invite the click. Non-linked items are unaffected. */
+.media-grid__link img,
+.media-grid__link video {
+  transition: filter 0.35s ease, opacity 0.35s ease;
+}
+.media-grid__link:hover img,
+.media-grid__link:hover video {
+  filter: grayscale(100%);
+  opacity: 0.85;
+}
+
+/* Mobile: collapse the media grid to a single stacked column instead of
+   side-by-side, and let items that spanned multiple columns fall back to
+   spanning just the one column that remains. */
+@media (max-width: 768px) {
+  .media-grid-row {
+    grid-template-columns: 1fr !important;
+  }
+  .media-grid-row > * {
+    grid-column: auto !important;
+  }
+  .media-grid-fullrow {
+    grid-template-columns: 1fr !important;
+  }
+
+  .media-grid-caption {
+    line-height: 1.4 !important;
+    padding: 0.5rem 1rem !important;
+  }
+}
+
