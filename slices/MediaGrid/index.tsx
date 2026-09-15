@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Content, isFilled, asLink, type RichTextField, type ImageField } from "@prismicio/client";
 import { SliceComponentProps, PrismicRichText } from "@prismicio/react";
 import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
+import { linkResolver } from "@/prismicio";
 import VimeoPlayer from "@/app/components/VimeoPlayer";
 // Type-only import: erased at build time, so hls.js is never pulled into the
 // server bundle or loaded during SSR. The runtime library is imported lazily
@@ -318,7 +319,7 @@ function ItemMedia({ item, referenceWidthPx }: { item: Item; referenceWidthPx: n
   // load, letting the proxy redirect + dark cookie + fresh server render apply
   // and the page actually come back black.
   if (item.link_dark) {
-    const base = asLink(item.link) || "/";
+    const base = asLink(item.link, linkResolver) || "/";
     const href = `${base}${base.includes("?") ? "&" : "?"}dark`;
     return (
       <a href={href} className="media-grid__link">
@@ -333,6 +334,7 @@ function ItemMedia({ item, referenceWidthPx }: { item: Item; referenceWidthPx: n
   return (
     <PrismicNextLink
       field={item.link}
+      linkResolver={linkResolver}
       className="media-grid__link"
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >

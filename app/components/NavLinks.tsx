@@ -2,8 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import { PrismicNextLink } from "@prismicio/next";
-import { isFilled, type Content } from "@prismicio/client";
+import { isFilled, asLink, type Content } from "@prismicio/client";
 import type { SiteMode } from "@/app/lib/site-mode";
+import { linkResolver } from "@/prismicio";
 
 // Each nav item can be limited to the White (light = Malak Haynes) or Black
 // (dark = Very Inner Vibrations) version. "Both" (or unset) always shows.
@@ -20,7 +21,7 @@ export default function NavLinks({ items, mode }: { items: Content.SettingsDocum
   return (
     <nav style={{ display: "flex", gap: "2.5rem" }}>
       {items.filter((item) => visibleForMode(item, mode)).map((item) => {
-        const href = isFilled.link(item.link) ? item.link.url : undefined;
+        const href = isFilled.link(item.link) ? asLink(item.link, linkResolver) : undefined;
         const isActive = href
           ? href === "/"
             ? pathname === "/"
@@ -31,6 +32,7 @@ export default function NavLinks({ items, mode }: { items: Content.SettingsDocum
           <PrismicNextLink
             key={item.label}
             field={item.link}
+            linkResolver={linkResolver}
             style={{
               fontSize: "1rem",
               color: isActive ? "#888" : "var(--foreground)",

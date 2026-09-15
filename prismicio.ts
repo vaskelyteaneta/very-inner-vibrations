@@ -1,10 +1,10 @@
 import {
   createClient as baseCreateClient,
   type ClientConfig,
-  type Route,
+  type LinkResolverFunction,
 } from "@prismicio/client";
 import { enableAutoPreviews } from "@prismicio/next";
-import sm from "./slicemachine.config.json";
+import sm from "./prismic.config.json";
 
 /**
  * The project's Prismic repository name.
@@ -13,15 +13,17 @@ export const repositoryName =
   process.env.NEXT_PUBLIC_PRISMIC_ENVIRONMENT || sm.repositoryName;
 
 /**
- * A list of Route Resolver objects that define how a document's `url` field is resolved.
- *
- * {@link https://prismic.io/docs/route-resolver#route-resolver}
+ * Resolves a document's URL locally instead of via the client's `routes`
+ * option. This repo's Prismic instance (created on the newer Type Builder
+ * system) rejects queries that include the `routes` param with a
+ * "Link resolver error", so URLs are resolved here instead.
  */
-// TODO: Update the routes array to match your project's route structure.
-const routes: Route[] = [
-  { type: "page", uid: "home", path: "/" },
-  { type: "page", path: "/:uid" },
-];
+export const linkResolver: LinkResolverFunction = (doc) => {
+  if (doc.type === "page") {
+    return doc.uid === "home" ? "/" : `/${doc.uid}`;
+  }
+  return "/";
+};
 
 /**
  * Creates a Prismic client for the project's repository. The client is used to
@@ -31,7 +33,6 @@ const routes: Route[] = [
  */
 export const createClient = (config: ClientConfig = {}) => {
   const client = baseCreateClient(repositoryName, {
-    routes,
     fetchOptions:
       process.env.NODE_ENV === "production"
         ? { next: { tags: ["prismic"] }, cache: "force-cache" }

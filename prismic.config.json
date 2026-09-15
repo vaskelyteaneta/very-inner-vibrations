@@ -3,5 +3,8 @@
   "libraries": [
     "./slices"
   ],
-  "routes": []
+  "routes": [
+    { "type": "page", "uid": "home", "path": "/" },
+    { "type": "page", "path": "/:uid" }
+  ]
 }
