@@ -37,10 +37,13 @@ export function proxy(request: NextRequest) {
     return response;
   }
 
+  // envMode wins over any stray cookie: once a deployment is pinned to one
+  // mode via SITE_MODE, a leftover cookie from shared-codebase days (or a
+  // stale toggle click) must never override it.
   const cookieMode = request.cookies.get(MODE_COOKIE)?.value;
   const mode =
-    (cookieMode === "dark" || cookieMode === "light" ? cookieMode : null) ??
     envMode ??
+    (cookieMode === "dark" || cookieMode === "light" ? cookieMode : null) ??
     (DARK_MODE_HOSTS.includes(hostname) ? "dark" : "light");
 
   // Home differs by version: the black / Very Inner Vibrations version lands on
