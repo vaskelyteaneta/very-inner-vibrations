@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Content, isFilled, asLink, type RichTextField, type ImageField } from "@prismicio/client";
+import { Content, isFilled, type RichTextField, type ImageField } from "@prismicio/client";
 import { SliceComponentProps, PrismicRichText } from "@prismicio/react";
 import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
 import { linkResolver } from "@/prismicio";
@@ -311,22 +311,6 @@ function MediaItem({ item, style, referenceWidthPx }: { item: Item; style?: Reac
 function ItemMedia({ item, referenceWidthPx }: { item: Item; referenceWidthPx: number }): React.JSX.Element | null {
   const media = renderByType(item, referenceWidthPx);
   if (!media || !isFilled.link(item.link)) return media;
-
-  // "Open in black version" appends the ?dark flag (which proxy.ts turns into
-  // dark / Very Inner Vibrations mode) to the resolved link. It uses a plain
-  // <a> (not next/link) on purpose: the theme is decided in the root layout,
-  // which a client-side navigation does NOT re-run — so we force a full page
-  // load, letting the proxy redirect + dark cookie + fresh server render apply
-  // and the page actually come back black.
-  if (item.link_dark) {
-    const base = asLink(item.link, linkResolver) || "/";
-    const href = `${base}${base.includes("?") ? "&" : "?"}dark`;
-    return (
-      <a href={href} className="media-grid__link">
-        {media}
-      </a>
-    );
-  }
 
   // Internal (document) links stay in the same tab so navigation stays inside
   // the site; only external web links open in a new tab.

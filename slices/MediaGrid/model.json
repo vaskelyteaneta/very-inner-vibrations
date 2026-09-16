@@ -12,19 +12,6 @@
       "items": {},
       "name": "Default",
       "primary": {
-        "visible_on": {
-          "config": {
-            "default_value": "Both",
-            "label": "Show on version (White = Malak Haynes / Black = Very Inner Vibrations)",
-            "options": [
-              "Both",
-              "White only",
-              "Black only"
-            ],
-            "placeholder": ""
-          },
-          "type": "Select"
-        },
         "shared_caption": {
           "config": {
             "allowTargetBlank": false,
@@ -162,13 +149,6 @@
                   "select": null
                 },
                 "type": "Link"
-              },
-              "link_dark": {
-                "config": {
-                  "default_value": false,
-                  "label": "Open linked page in black (Very Inner Vibrations) version"
-                },
-                "type": "Boolean"
               },
               "size": {
                 "config": {
