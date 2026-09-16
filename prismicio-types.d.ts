@@ -370,17 +370,6 @@ export interface MediaGridSliceDefaultPrimaryItemsItem {
 	link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
 	
 	/**
-	 * Open linked page in black (Very Inner Vibrations) version field in *MediaGrid → Default → Primary → Items*
-	 *
-	 * - **Field Type**: Boolean
-	 * - **Placeholder**: *None*
-	 * - **Default Value**: false
-	 * - **API ID Path**: media_grid.default.primary.items[].link_dark
-	 * - **Documentation**: https://prismic.io/docs/fields/boolean
-	 */
-	link_dark: prismic.BooleanField;
-	
-	/**
 	 * Size (Grid mode only) field in *MediaGrid → Default → Primary → Items*
 	 *
 	 * - **Field Type**: Select
@@ -418,17 +407,6 @@ export interface MediaGridSliceDefaultPrimaryItemsItem {
  * Primary content in *MediaGrid → Default → Primary*
  */
 export interface MediaGridSliceDefaultPrimary {
-	/**
-	 * Show on version (White = Malak Haynes / Black = Very Inner Vibrations) field in *MediaGrid → Default → Primary*
-	 *
-	 * - **Field Type**: Select
-	 * - **Placeholder**: *None*
-	 * - **Default Value**: Both
-	 * - **API ID Path**: media_grid.default.primary.visible_on
-	 * - **Documentation**: https://prismic.io/docs/fields/select
-	 */
-	visible_on: prismic.SelectField<"Both" | "White only" | "Black only", "filled">;
-	
 	/**
 	 * Shared caption (optional — used when every item shares the same caption, instead of filling in each item's own Caption field) field in *MediaGrid → Default → Primary*
 	 *
