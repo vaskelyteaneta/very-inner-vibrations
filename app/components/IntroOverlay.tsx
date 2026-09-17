@@ -21,7 +21,7 @@ function markIntroSeen(): void {
 }
 
 // Auto-dismiss the intro after this long even without any interaction.
-const AUTO_DISMISS_MS = 3000;
+const AUTO_DISMISS_MS = 2000;
 // Fade-out duration; kept in sync with the CSS transition below.
 const FADE_MS = 700;
 
