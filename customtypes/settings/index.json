@@ -119,6 +119,17 @@
         },
         "type": "Image"
       }
+    },
+    "Style": {
+      "rounded_media": {
+        "config": {
+          "default_value": false,
+          "label": "Rounded media corners (30px) — applies to every image/video across the site",
+          "placeholder_false": "Square",
+          "placeholder_true": "Rounded"
+        },
+        "type": "Boolean"
+      }
     }
   },
   "label": "Settings",

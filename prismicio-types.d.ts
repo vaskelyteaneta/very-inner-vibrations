@@ -258,6 +258,18 @@ interface SettingsDocumentData {
 	 * - **Documentation**: https://prismic.io/docs/fields/image
 	 */
 	intro_image: prismic.ImageField<never>;
+
+	/**
+	 * Rounded media corners (30px) — applies to every image/video across the site field in *Settings*
+	 *
+	 * - **Field Type**: Boolean
+	 * - **Placeholder**: *None*
+	 * - **Default Value**: false
+	 * - **API ID Path**: settings.rounded_media
+	 * - **Tab**: Style
+	 * - **Documentation**: https://prismic.io/docs/fields/boolean
+	 */
+	rounded_media: prismic.BooleanField;
 }
 
 /**
