@@ -258,18 +258,6 @@ interface SettingsDocumentData {
 	 * - **Documentation**: https://prismic.io/docs/fields/image
 	 */
 	intro_image: prismic.ImageField<never>;
-
-	/**
-	 * Intro plays field in *Settings*
-	 *
-	 * - **Field Type**: Select
-	 * - **Placeholder**: *None*
-	 * - **Default Value**: Once per session
-	 * - **API ID Path**: settings.intro_frequency
-	 * - **Tab**: Intro
-	 * - **Documentation**: https://prismic.io/docs/fields/select
-	 */
-	intro_frequency: prismic.SelectField<"Once per session" | "Every visit" | "Off", "filled">;
 }
 
 /**
