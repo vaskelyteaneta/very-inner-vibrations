@@ -249,7 +249,7 @@ interface SettingsDocumentData {
 	intro_video_url: prismic.KeyTextField;
 
 	/**
-	 * Intro image — optional; shown if no video is set field in *Settings*
+	 * Intro image — optional; shown if no video is set. If both this and the video are empty, the intro is just the background color with the logo/wordmark field in *Settings*
 	 *
 	 * - **Field Type**: Image
 	 * - **Placeholder**: *None*

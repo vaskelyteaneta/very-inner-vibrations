@@ -114,7 +114,7 @@
       "intro_image": {
         "config": {
           "constraint": {},
-          "label": "Intro image — optional; shown if no video is set",
+          "label": "Intro image — optional; shown if no video is set. If both this and the video are empty, the intro is just the background color with the logo/wordmark",
           "thumbnails": []
         },
         "type": "Image"
