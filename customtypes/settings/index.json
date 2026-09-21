@@ -98,7 +98,7 @@
     "Intro": {
       "intro_video": {
         "config": {
-          "label": "Intro video (.mp4 upload) — leave empty to disable the intro splash entirely",
+          "label": "Intro video (.mp4 upload) — optional",
           "placeholder": "Upload or select an mp4",
           "select": "media"
         },
@@ -106,18 +106,27 @@
       },
       "intro_video_url": {
         "config": {
-          "label": "Intro video URL (.m3u8 HLS or .mp4) — paste an external link; overrides the uploaded file above",
+          "label": "Intro video URL (.m3u8 HLS or .mp4) — optional; overrides the uploaded file above",
           "placeholder": "https://…/playlist.m3u8"
         },
         "type": "Text"
       },
+      "intro_image": {
+        "config": {
+          "constraint": {},
+          "label": "Intro image — optional; shown if no video is set",
+          "thumbnails": []
+        },
+        "type": "Image"
+      },
       "intro_frequency": {
         "config": {
           "default_value": "Once per session",
-          "label": "Intro plays",
+          "label": "Intro plays — \"Off\" disables the splash entirely. Otherwise it always shows: video, then image, then just the plain background color if both are empty",
           "options": [
             "Once per session",
-            "Every visit"
+            "Every visit",
+            "Off"
           ],
           "placeholder": ""
         },

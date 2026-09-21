@@ -227,7 +227,7 @@ interface SettingsDocumentData {
 	 * - **Documentation**: https://prismic.io/docs/slices
 	 */
 	slices: prismic.SliceZone<SettingsDocumentDataSlicesSlice>;/**
-	 * Intro video (.mp4 upload) — leave empty to disable the intro splash entirely field in *Settings*
+	 * Intro video (.mp4 upload) — optional field in *Settings*
 	 *
 	 * - **Field Type**: Link to Media
 	 * - **Placeholder**: Upload or select an mp4
@@ -236,9 +236,9 @@ interface SettingsDocumentData {
 	 * - **Documentation**: https://prismic.io/docs/fields/link-to-media
 	 */
 	intro_video: prismic.LinkToMediaField<prismic.FieldState, never>;
-	
+
 	/**
-	 * Intro video URL (.m3u8 HLS or .mp4) — paste an external link; overrides the uploaded file above field in *Settings*
+	 * Intro video URL (.m3u8 HLS or .mp4) — optional; overrides the uploaded file above field in *Settings*
 	 *
 	 * - **Field Type**: Text
 	 * - **Placeholder**: https://…/playlist.m3u8
@@ -247,7 +247,18 @@ interface SettingsDocumentData {
 	 * - **Documentation**: https://prismic.io/docs/fields/text
 	 */
 	intro_video_url: prismic.KeyTextField;
-	
+
+	/**
+	 * Intro image — optional; shown if no video is set field in *Settings*
+	 *
+	 * - **Field Type**: Image
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: settings.intro_image
+	 * - **Tab**: Intro
+	 * - **Documentation**: https://prismic.io/docs/fields/image
+	 */
+	intro_image: prismic.ImageField<never>;
+
 	/**
 	 * Intro plays field in *Settings*
 	 *
@@ -258,7 +269,7 @@ interface SettingsDocumentData {
 	 * - **Tab**: Intro
 	 * - **Documentation**: https://prismic.io/docs/fields/select
 	 */
-	intro_frequency: prismic.SelectField<"Once per session" | "Every visit", "filled">;
+	intro_frequency: prismic.SelectField<"Once per session" | "Every visit" | "Off", "filled">;
 }
 
 /**
