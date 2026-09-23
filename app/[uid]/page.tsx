@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SliceZone } from "@prismicio/react";
-import { isFilled } from "@prismicio/client";
 import { createClient } from "@/prismicio";
 import { components } from "@/slices";
 import BackButton from "@/app/components/BackButton";
@@ -13,13 +12,21 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const client = createClient();
   const page = await client.getByUID("page", uid).catch(() => notFound());
 
-  // Project pages (e.g. a single movie) get a Back button; top-level pages
-  // linked directly from the nav (Films/Music/About) don't need one.
+  // Project pages get a Back button; top-level pages linked directly from the
+  // nav (Music/About) don't need one — you reach those from the nav, and the
+  // circle button handles moving between the two sites.
+  //
+  // Matched on the linked document's uid, not its resolved .url: this repo's
+  // client can't pass `routes` (see prismicio.ts), so document links never
+  // carry a url and the old url-based check matched nothing — which made
+  // every page look like a project page and showed Back everywhere.
   const settings = await client.getSingle("settings");
-  const navHrefs = settings.data.navigation
-    .map((item) => (isFilled.link(item.link) ? item.link.url : null))
-    .filter(Boolean);
-  const isProjectPage = !navHrefs.includes(`/${uid}`);
+  const navUids = new Set(
+    settings.data.navigation.flatMap((item) =>
+      item.link.link_type === "Document" && item.link.uid ? [item.link.uid] : []
+    )
+  );
+  const isProjectPage = !navUids.has(uid);
 
   return (
     <>
