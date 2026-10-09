@@ -471,6 +471,14 @@ export interface MediaGridSliceDefaultPrimary {
 	 */
 	gaps: prismic.SelectField<"normal" | "full-screen", "filled">;
 	
+	item_gap: prismic.SelectField<"none" | "small" | "normal" | "large">;
+	
+	slice_spacing: prismic.SelectField<"none" | "small" | "normal" | "large">;
+	
+	text_size: prismic.SelectField<"small" | "normal" | "large">;
+	
+	text_align: prismic.SelectField<"left" | "center" | "right">;
+	
 	/**
 	 * Items field in *MediaGrid → Default → Primary*
 	 *

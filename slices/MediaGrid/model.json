@@ -15,7 +15,7 @@
         "shared_caption": {
           "config": {
             "allowTargetBlank": false,
-            "label": "Shared caption (optional — used when every item shares the same caption, instead of filling in each item's own Caption field)",
+            "label": "Shared caption (optional \u2014 used when every item shares the same caption, instead of filling in each item's own Caption field)",
             "multi": "paragraph,strong,em",
             "placeholder": ""
           },
@@ -68,6 +68,60 @@
           },
           "type": "Select"
         },
+        "item_gap": {
+          "type": "Select",
+          "config": {
+            "label": "Space between items in a row",
+            "placeholder": "",
+            "options": [
+              "none",
+              "small",
+              "normal",
+              "large"
+            ],
+            "default_value": "normal"
+          }
+        },
+        "slice_spacing": {
+          "type": "Select",
+          "config": {
+            "label": "Space above and below this section",
+            "placeholder": "",
+            "options": [
+              "none",
+              "small",
+              "normal",
+              "large"
+            ],
+            "default_value": "normal"
+          }
+        },
+        "text_size": {
+          "type": "Select",
+          "config": {
+            "label": "Text size (captions and text blocks)",
+            "placeholder": "",
+            "options": [
+              "small",
+              "normal",
+              "large"
+            ],
+            "default_value": "normal"
+          }
+        },
+        "text_align": {
+          "type": "Select",
+          "config": {
+            "label": "Text alignment (captions and text blocks)",
+            "placeholder": "",
+            "options": [
+              "left",
+              "center",
+              "right"
+            ],
+            "default_value": "center"
+          }
+        },
         "items": {
           "config": {
             "fields": {
@@ -95,15 +149,15 @@
               },
               "video_url": {
                 "config": {
-                  "label": "Video URL (.m3u8 HLS stream or .mp4) — paste an external link; overrides the uploaded file above",
-                  "placeholder": "https://…/playlist.m3u8"
+                  "label": "Video URL (.m3u8 HLS stream or .mp4) \u2014 paste an external link; overrides the uploaded file above",
+                  "placeholder": "https://\u2026/playlist.m3u8"
                 },
                 "type": "Text"
               },
               "poster": {
                 "config": {
                   "constraint": {},
-                  "label": "Poster / still image (Video) — when set, the grid shows this still and clicking it follows the item's Link instead of playing inline",
+                  "label": "Poster / still image (Video) \u2014 when set, the grid shows this still and clicking it follows the item's Link instead of playing inline",
                   "thumbnails": []
                 },
                 "type": "Image"
@@ -144,7 +198,7 @@
               "link": {
                 "config": {
                   "allowTargetBlank": true,
-                  "label": "Link (optional — makes the item clickable)",
+                  "label": "Link (optional \u2014 makes the item clickable)",
                   "placeholder": "",
                   "select": null
                 },
