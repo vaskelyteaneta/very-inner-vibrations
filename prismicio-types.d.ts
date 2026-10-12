@@ -380,6 +380,8 @@ export interface MediaGridSliceDefaultPrimaryItemsItem {
 	 */
 	link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
 	
+	hover_label: prismic.KeyTextField;
+	
 	/**
 	 * Size (Grid mode only) field in *MediaGrid → Default → Primary → Items*
 	 *
