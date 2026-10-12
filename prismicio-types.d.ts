@@ -481,6 +481,8 @@ export interface MediaGridSliceDefaultPrimary {
 	
 	text_align: prismic.SelectField<"left" | "center" | "right">;
 	
+	hover_label_size: prismic.SelectField<"small" | "medium" | "large">;
+	
 	/**
 	 * Items field in *MediaGrid → Default → Primary*
 	 *
