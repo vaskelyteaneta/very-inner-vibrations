@@ -406,16 +406,6 @@ export interface MediaGridSliceDefaultPrimaryItemsItem {
 	 */
 	object_fit: prismic.SelectField<"contain" | "cover" | "fill", "filled">;
 	
-	/**
-	 * Image height field in *MediaGrid → Default → Primary → Items*
-	 *
-	 * - **Field Type**: Select
-	 * - **Placeholder**: *None*
-	 * - **Default Value**: auto
-	 * - **API ID Path**: media_grid.default.primary.items[].image_height
-	 * - **Documentation**: https://prismic.io/docs/fields/select
-	 */
-	image_height: prismic.SelectField<"auto" | "300px" | "400px" | "500px" | "600px" | "700px" | "800px", "filled">;
 }
 
 /**
