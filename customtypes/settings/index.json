@@ -3,6 +3,19 @@
   "id": "settings",
   "json": {
     "Main": {
+      "homepage": {
+        "type": "Link",
+        "config": {
+          "label": "Home page (which page visitors land on at the site root)",
+          "placeholder": "Pick a page",
+          "select": "document",
+          "customtypes": [
+            "page"
+          ],
+          "allowTargetBlank": false,
+          "repeat": false
+        }
+      },
       "logo": {
         "config": {
           "constraint": {},
