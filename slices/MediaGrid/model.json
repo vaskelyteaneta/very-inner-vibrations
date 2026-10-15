@@ -14,9 +14,9 @@
       "primary": {
         "shared_caption": {
           "config": {
-            "allowTargetBlank": false,
+            "allowTargetBlank": true,
             "label": "Shared caption (optional — used when every item shares the same caption, instead of filling in each item's own Caption field)",
-            "multi": "paragraph,strong,em",
+            "multi": "paragraph,strong,em,hyperlink",
             "placeholder": ""
           },
           "type": "StructuredText"
@@ -188,9 +188,9 @@
               },
               "caption": {
                 "config": {
-                  "allowTargetBlank": false,
+                  "allowTargetBlank": true,
                   "label": "Caption (Enter = new row)",
-                  "multi": "paragraph,strong,em",
+                  "multi": "paragraph,strong,em,hyperlink",
                   "placeholder": ""
                 },
                 "type": "StructuredText"

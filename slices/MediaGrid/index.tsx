@@ -152,7 +152,7 @@ const MediaGrid = ({ slice }: MediaGridProps): React.JSX.Element => {
 
       {Array.isArray(slice.primary.section_title) && isFilled.richText(slice.primary.section_title) && (
         <div className="media-grid-caption" style={captionStyle({ bold: true })}>
-          <PrismicRichText field={slice.primary.section_title} components={captionRichText} />
+          <PrismicRichText field={slice.primary.section_title} components={captionRichText} linkResolver={linkResolver} />
         </div>
       )}
     </section>
@@ -227,7 +227,7 @@ function GridLayout({ items, columns, gap, sharedCaption }: { items: Item[]; col
           (see MediaItem); this shared one is always present when filled. */}
       {hasSharedCaption && (
         <div className="media-grid-caption" style={captionStyle()}>
-          <PrismicRichText field={sharedCaption} components={captionRichText} />
+          <PrismicRichText field={sharedCaption} components={captionRichText} linkResolver={linkResolver} />
         </div>
       )}
     </div>
@@ -379,12 +379,12 @@ function SliderLayout({ items, perView, gap, fullScreen, sharedCaption }: { item
           <>
             {ownCaptionItems.map((item, i) => (
               <div key={i} className="media-grid-caption" style={captionStyle()}>
-                <PrismicRichText field={item.caption} components={captionRichText} />
+                <PrismicRichText field={item.caption} components={captionRichText} linkResolver={linkResolver} />
               </div>
             ))}
             {anyFallsBackToShared && Array.isArray(sharedCaption) && isFilled.richText(sharedCaption) && (
               <div className="media-grid-caption" style={captionStyle()}>
-                <PrismicRichText field={sharedCaption} components={captionRichText} />
+                <PrismicRichText field={sharedCaption} components={captionRichText} linkResolver={linkResolver} />
               </div>
             )}
           </>
@@ -401,7 +401,7 @@ function MediaItem({ item, style, referenceWidthPx }: { item: Item; style?: Reac
       <ItemMedia item={item} referenceWidthPx={referenceWidthPx} />
       {Array.isArray(caption) && isFilled.richText(caption) && (
         <div className="media-grid-caption" style={captionStyle()}>
-          <PrismicRichText field={caption} components={captionRichText} />
+          <PrismicRichText field={caption} components={captionRichText} linkResolver={linkResolver} />
         </div>
       )}
     </figure>
