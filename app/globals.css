@@ -214,9 +214,15 @@ html, body {
 
   /* 1.5rem of side padding, not 1rem: a caption under a full-bleed row spans
      the whole screen, so anything less leaves the text almost touching the
-     phone's edges. */
+     phone's edges.
+
+     Font size is a flat 1rem, deliberately ignoring --media-text-scale. The
+     Text size control is for desktop, where there is room for a section to
+     read larger or smaller; on a 375px screen a "large" section came out at
+     20px and simply looked oversized. Every piece of text on a phone — nav,
+     captions, text blocks, hover labels, footer — is 1rem. */
   .media-grid-caption {
-    font-size: calc(1rem * var(--media-text-scale, 1)) !important;
+    font-size: 1rem !important;
     line-height: 1.4 !important;
     padding: 0.5rem 1.5rem !important;
   }
