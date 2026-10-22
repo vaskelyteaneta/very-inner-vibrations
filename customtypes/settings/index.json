@@ -24,6 +24,14 @@
         },
         "type": "Image"
       },
+      "play_icon": {
+        "type": "Image",
+        "config": {
+          "label": "Play button (optional — upload a PNG with a transparent background; leave empty for the default triangle)",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
       "footer_text": {
         "config": {
           "allowTargetBlank": false,
