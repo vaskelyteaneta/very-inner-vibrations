@@ -351,6 +351,16 @@ export interface MediaGridSliceDefaultPrimaryItemsItem {
 	embed: prismic.EmbedField
 	
 	/**
+	 * Autoplay field in *MediaGrid → Default → Primary → Items*
+	 *
+	 * - **Field Type**: Boolean
+	 * - **Default Value**: false
+	 * - **API ID Path**: media_grid.default.primary.items[].autoplay
+	 * - **Documentation**: https://prismic.io/docs/fields/boolean
+	 */
+	autoplay: prismic.BooleanField;
+	
+	/**
 	 * Text field in *MediaGrid → Default → Primary → Items*
 	 *
 	 * - **Field Type**: Rich Text

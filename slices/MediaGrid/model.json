@@ -177,6 +177,15 @@
                 },
                 "type": "Embed"
               },
+              "autoplay": {
+                "type": "Boolean",
+                "config": {
+                  "label": "Autoplay this video (plays silently on loop; viewers get a mute/unmute button)",
+                  "default_value": false,
+                  "placeholder_false": "off",
+                  "placeholder_true": "on"
+                }
+              },
               "text": {
                 "config": {
                   "allowTargetBlank": true,
