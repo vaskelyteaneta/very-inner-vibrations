@@ -19,7 +19,11 @@ export default async function Header({ mode }: { mode: SiteMode }) {
         gap: "0.75rem",
       }}
     >
-      <PrismicNextLink href={isDark ? "/music" : "/movies"}>
+      {/* "/" resolves to whatever Settings > Home page points at, so the
+          wordmark follows that choice instead of a hardcoded page. The old
+          target was /movies, which only still worked via a redirect left over
+          from when that page was renamed. */}
+      <PrismicNextLink href="/">
         {isDark ? (
           // Placeholder wordmark for Very Inner Vibrations until a real logo is designed.
           <span
@@ -38,7 +42,7 @@ export default async function Header({ mode }: { mode: SiteMode }) {
         )}
       </PrismicNextLink>
 
-      <NavLinks items={settings.data.navigation} mode={mode} />
+      <NavLinks items={settings.data.navigation} />
     </header>
   );
 }

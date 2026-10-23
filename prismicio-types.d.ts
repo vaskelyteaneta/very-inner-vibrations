@@ -155,16 +155,6 @@ export interface SettingsDocumentDataNavigationItem {
 	 */
 	link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
 	
-	/**
-	 * Show on version (White = Malak Haynes / Black = Very Inner Vibrations) field in *Settings → navigation*
-	 *
-	 * - **Field Type**: Select
-	 * - **Placeholder**: *None*
-	 * - **Default Value**: Both
-	 * - **API ID Path**: settings.navigation[].visible_on
-	 * - **Documentation**: https://prismic.io/docs/fields/select
-	 */
-	visible_on: prismic.SelectField<"Both" | "White only" | "Black only", "filled">;
 }
 
 type SettingsDocumentDataSlicesSlice = never

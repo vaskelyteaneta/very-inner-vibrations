@@ -88,19 +88,6 @@
                 "select": null
               },
               "type": "Link"
-            },
-            "visible_on": {
-              "config": {
-                "default_value": "Both",
-                "label": "Show on version (White = Malak Haynes / Black = Very Inner Vibrations)",
-                "options": [
-                  "Both",
-                  "White only",
-                  "Black only"
-                ],
-                "placeholder": ""
-              },
-              "type": "Select"
             }
           },
           "label": "navigation",

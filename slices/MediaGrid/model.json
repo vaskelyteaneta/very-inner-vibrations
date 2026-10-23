@@ -24,7 +24,7 @@
         "section_title": {
           "config": {
             "allowTargetBlank": false,
-            "label": "TITLE",
+            "label": "Section title (optional)",
             "multi": "paragraph,strong,em",
             "placeholder": ""
           },
