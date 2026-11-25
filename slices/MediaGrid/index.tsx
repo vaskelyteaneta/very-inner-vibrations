@@ -7,6 +7,8 @@ import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
 import VimeoPlayer from "@/app/components/VimeoPlayer";
 import { snapAspectRatio } from "@/app/lib/aspect-ratio";
 import { captionRichText, plainRichText } from "@/app/components/richText";
+import { claimAudio, releaseAudio } from "@/app/lib/audio-owner";
+import { useSiteSettings } from "@/app/components/SiteSettings";
 import { linkResolver } from "@/prismicio";
 // Type-only import: erased at build time, so hls.js is never pulled into the
 // server bundle or loaded during SSR. The runtime library is imported lazily
@@ -464,7 +466,11 @@ function renderByType(item: Item, referenceWidthPx: number): React.JSX.Element |
   // Poster mode (Video or Embed): when a still is provided, show it instead of
   // playing inline. ItemMedia wraps it in the item's Link, so clicking the
   // still navigates to the page (e.g. the movie page) where the video lives.
-  if (isFilled.image(item.poster) && (item.content_type === "Video" || item.content_type === "Embed")) {
+  // A poster image normally replaces the player with a static still plus a
+  // play badge. An autoplaying video must never be intercepted that way —
+  // it would show a picture that never moves — so it goes to the player,
+  // which uses the same image as its own poster frame until playback starts.
+  if (isFilled.image(item.poster) && item.autoplay !== true && (item.content_type === "Video" || item.content_type === "Embed")) {
     return <VideoPoster item={item} referenceWidthPx={referenceWidthPx} />;
   }
 
@@ -482,7 +488,13 @@ function renderByType(item: Item, referenceWidthPx: number): React.JSX.Element |
         : isFilled.linkToMedia(item.video)
           ? item.video.url
           : null;
-      return src ? <CustomVideoPlayer src={src} /> : null;
+      return src ? (
+        <CustomVideoPlayer
+          src={src}
+          autoplay={item.autoplay === true}
+          poster={isFilled.image(item.poster) ? item.poster.url : null}
+        />
+      ) : null;
     }
 
     case "Image":
@@ -577,9 +589,53 @@ function VideoPoster({ item, referenceWidthPx }: { item: Item; referenceWidthPx:
 
 const isHlsSource = (src: string): boolean => /\.m3u8(\?|#|$)/i.test(src);
 
-function CustomVideoPlayer({ src }: { src: string }): React.JSX.Element {
+export function CustomVideoPlayer({
+  src,
+  autoplay = false,
+  poster = null,
+}: {
+  src: string;
+  autoplay?: boolean;
+  poster?: string | null;
+}): React.JSX.Element {
+  const { playIconUrl } = useSiteSettings();
+  const containerRef = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  // Autoplay is only permitted muted — every browser blocks a video that
+  // starts with sound. So an autoplaying video begins silent and the viewer
+  // turns the sound on themselves. Mirrors VimeoPlayer exactly.
+  const [muted, setMuted] = useState(autoplay);
+
+  // How this player gives up the audio when another one takes it: an
+  // autoplaying video drops back to silent and keeps running, a click-to-play
+  // one pauses. Held in a ref so its identity is stable, because the
+  // coordinator compares by reference to know who the current owner is.
+  const yieldAudioRef = useRef<() => void>(() => {});
+  yieldAudioRef.current = () => {
+    const v = ref.current;
+    if (!v) return;
+    if (autoplay) {
+      setMuted(true);
+      v.muted = true;
+    } else {
+      v.pause();
+    }
+  };
+  const yieldAudio = useRef(() => yieldAudioRef.current()).current;
+
+  useEffect(() => () => releaseAudio(yieldAudio), [yieldAudio]);
+
+  // Keep the element's real muted property in step with React state. The
+  // `muted` JSX attribute is not reliably applied by React, and an unmuted
+  // element is exactly what makes a browser refuse to autoplay at all.
+  useEffect(() => {
+    if (ref.current) ref.current.muted = muted;
+  }, [muted]);
 
   // Wire the source up here rather than via the <video src> attribute so HLS
   // (.m3u8) streams can be routed through hls.js on browsers that lack native
@@ -588,6 +644,11 @@ function CustomVideoPlayer({ src }: { src: string }): React.JSX.Element {
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
+
+    // Set before the source loads: a browser decides whether to allow
+    // autoplay at load time, and an element that is not yet muted then is
+    // refused even if it is muted a moment later.
+    video.muted = autoplay ? true : muted;
 
     if (!isHlsSource(src) || video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = src;
@@ -612,28 +673,172 @@ function CustomVideoPlayer({ src }: { src: string }): React.JSX.Element {
       cancelled = true;
       hls?.destroy();
     };
-  }, [src]);
+    // `muted` is deliberately not a dependency: it is only read to seed the
+    // element, and re-running this would reload the video on every mute.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [src, autoplay]);
+
+  // Play only while on screen. Without this every autoplaying video on the
+  // page downloads and decodes at once, which is what makes a phone stutter.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const v = ref.current;
+        if (!v) return;
+        if (entry.isIntersecting) {
+          // An autoplaying video is meant to be running whenever it is on
+          // screen, so pick it back up after it was paused on the way past.
+          if (autoplay) v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [autoplay]);
+
+  const toggleMuted = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const next = !muted;
+    setMuted(next);
+    if (ref.current) ref.current.muted = next;
+    // Unmuting is this player claiming the page's sound; muting hands it back.
+    if (next) releaseAudio(yieldAudio);
+    else claimAudio(yieldAudio);
+  };
 
   const toggle = () => {
     const v = ref.current;
     if (!v) return;
-    if (v.paused) { v.play(); setPlaying(true); }
-    else { v.pause(); setPlaying(false); }
+    if (v.paused) v.play().catch(() => {});
+    else v.pause();
+  };
+
+  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const v = ref.current;
+    if (!v || !v.duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    v.currentTime = v.duration * pct;
+  };
+
+  const fmt = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, "0")}`;
   };
 
   return (
-    <div className="media-grid-video-wrap" style={{ position: "relative" }}>
-      <video ref={ref} controls={playing} playsInline onEnded={() => setPlaying(false)} style={{ width: "100%", display: "block" }} />
-      {!playing && (
+    <div
+      ref={containerRef}
+      className="media-grid-video-box"
+      style={{ position: "relative", width: "100%", margin: "0 auto" }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="media-grid-video-wrap" style={{ position: "relative" }}>
+        <video
+          ref={ref}
+          playsInline
+          loop={autoplay}
+          autoPlay={autoplay}
+          preload={autoplay ? "auto" : "metadata"}
+          poster={poster ?? undefined}
+          onPlay={() => {
+            setPlaying(true);
+            // An autoplaying video starts muted, so it is not taking the
+            // audio by starting — it claims it only on unmute.
+            if (!autoplay) claimAudio(yieldAudio);
+          }}
+          onPause={() => {
+            setPlaying(false);
+            if (!autoplay) releaseAudio(yieldAudio);
+          }}
+          onEnded={() => {
+            setPlaying(false);
+            setProgress(0);
+            setCurrentTime(0);
+            if (!autoplay) releaseAudio(yieldAudio);
+          }}
+          onLoadedMetadata={(e) => setDuration(e.currentTarget.duration || 0)}
+          onTimeUpdate={(e) => {
+            const v = e.currentTarget;
+            setCurrentTime(v.currentTime);
+            if (v.duration) setProgress((v.currentTime / v.duration) * 100);
+          }}
+          style={{ width: "100%", display: "block" }}
+        />
+      </div>
+
+      {/* Play/pause overlay. Shown whenever the video is not actually
+          playing — not merely whenever autoplay is off — because autoplay can
+          be refused (iOS Low Power Mode blocks it even muted) and keying off
+          the setting would leave those viewers with no visible way to start. */}
+      <div
+        onClick={toggle}
+        style={{ position: "absolute", inset: 0, zIndex: 4, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        {!playing &&
+          (playIconUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={playIconUrl}
+              alt=""
+              className="media-grid__play"
+              style={{ width: "clamp(34px, 4.5%, 64px)", height: "auto", filter: "drop-shadow(0 1px 6px rgba(0, 0, 0, 0.55))" }}
+            />
+          ) : (
+            <svg
+              className="media-grid__play"
+              viewBox="0 0 29 28"
+              aria-hidden="true"
+              focusable="false"
+              style={{ width: "clamp(34px, 4.5%, 64px)", height: "auto", filter: "drop-shadow(0 1px 6px rgba(0, 0, 0, 0.55))" }}
+            >
+              <path d="M2 2 L27 14 L2 26 Z" fill="none" stroke="#fff" vectorEffect="non-scaling-stroke" strokeWidth="1.5" />
+            </svg>
+          ))}
+      </div>
+
+      {/* Mute control, shown only on autoplaying videos — they have no play
+          button, so without this there is no way into the sound at all. */}
+      {autoplay && (
         <button
-          type="button"
-          aria-label="Play video"
-          onClick={toggle}
-          style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.15)", border: 0, cursor: "pointer" }}
+          onClick={toggleMuted}
+          className="media-grid__mute"
+          style={{
+            position: "absolute",
+            top: "12px",
+            left: "16px",
+            zIndex: 6,
+            background: "none",
+            border: "none",
+            padding: "0.25rem 0.5rem",
+            cursor: "pointer",
+            font: "inherit",
+            fontSize: "1rem",
+            lineHeight: 1,
+            color: "#fff",
+            textShadow: "0 1px 3px rgba(0, 0, 0, 0.9), 0 1px 12px rgba(0, 0, 0, 0.7)",
+          }}
         >
-          <span style={{ width: 0, height: 0, borderTop: "16px solid transparent", borderBottom: "16px solid transparent", borderLeft: "26px solid #fff", marginLeft: 6 }} />
+          {muted ? "unmute" : "mute"}
         </button>
       )}
+
+      {/* Controls bar — inside the video, above the play overlay, on hover only. */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 5, opacity: hovered ? 1 : 0, transition: "opacity 0.2s", padding: "0 34px 12px" }}>
+        <div style={{ color: "#fff", fontSize: "0.75rem", fontFamily: "monospace", textShadow: "0 1px 4px rgba(0,0,0,0.8)", marginBottom: 6 }}>
+          {fmt(currentTime)} / {fmt(duration)}
+        </div>
+        <div onClick={seek} style={{ height: 3, background: "rgba(255,255,255,0.4)", cursor: "pointer", borderRadius: 2 }}>
+          <div style={{ height: "100%", width: `${progress}%`, background: "#fff", borderRadius: 2, transition: "width 0.1s linear" }} />
+        </div>
+      </div>
     </div>
   );
 }
